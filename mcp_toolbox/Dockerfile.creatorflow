@@ -1,0 +1,11 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y curl ca-certificates
+
+RUN curl -fSL -o toolbox https://storage.googleapis.com/genai-toolbox/v0.23.0/linux/amd64/toolbox && chmod +x toolbox
+
+COPY creator_tools.yaml /creator_tools.yaml
+
+EXPOSE 8080
+
+CMD ["sh", "-c", "./toolbox --tools-file /creator_tools.yaml --port ${PORT:-8080} --address 0.0.0.0 --log-level INFO --ui"]

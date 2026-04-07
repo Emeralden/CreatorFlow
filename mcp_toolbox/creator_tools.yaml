@@ -1,0 +1,202 @@
+sources:
+  creatorflow-db:
+    kind: postgres
+    host: ${CAMPUSCUE_DB_HOST}
+    port: ${CAMPUSCUE_DB_PORT}
+    database: ${CAMPUSCUE_DB_NAME}
+    user: ${CAMPUSCUE_DB_USER}
+    password: ${CAMPUSCUE_DB_PASSWORD}
+    queryParams:
+      sslmode: require
+      channel_binding: require
+      default_query_exec_mode: simple_protocol
+
+tools:
+  ensure_creatorflow_schema:
+    kind: postgres-sql
+    source: creatorflow-db
+    description: "Creates CreatorFlow tables when missing."
+    parameters: []
+    statement: |
+      DO $$
+      BEGIN
+        CREATE TABLE IF NOT EXISTS public.creators (
+          id BIGSERIAL PRIMARY KEY,
+          email TEXT NOT NULL UNIQUE,
+          name TEXT NOT NULL DEFAULT 'New Creator',
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE TABLE IF NOT EXISTS public.projects (
+          id BIGSERIAL PRIMARY KEY,
+          creator_id BIGINT NOT NULL REFERENCES public.creators(id) ON DELETE CASCADE,
+          title TEXT NOT NULL,
+          platform TEXT NOT NULL,
+          deadline TIMESTAMP NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE TABLE IF NOT EXISTS public.scripts (
+          id BIGSERIAL PRIMARY KEY,
+          project_id BIGINT NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
+          content TEXT NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE TABLE IF NOT EXISTS public.tasks (
+          id BIGSERIAL PRIMARY KEY,
+          project_id BIGINT NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
+          task_name TEXT NOT NULL,
+          is_completed BOOLEAN NOT NULL DEFAULT false,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE TABLE IF NOT EXISTS public.calendar_events (
+          id BIGSERIAL PRIMARY KEY,
+          creator_id BIGINT NOT NULL REFERENCES public.creators(id) ON DELETE CASCADE,
+          event_title TEXT NOT NULL,
+          start_time TIMESTAMP NOT NULL,
+          end_time TIMESTAMP NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      END
+      $$;
+
+  create_project:
+    kind: postgres-sql
+    source: creatorflow-db
+    description: "Ensures creator exists and creates a new project."
+    parameters:
+      - name: creator_email
+        type: string
+        description: "Creator email, for example creator@example.com"
+      - name: title
+        type: string
+        description: "Project title, for example FastAPI vs Node"
+      - name: platform
+        type: string
+        description: "Publishing platform, for example YouTube or Twitter"
+      - name: deadline
+        type: string
+        description: "Deadline in ISO datetime format, for example 2026-04-30T18:00:00"
+    statement: |
+      WITH target_creator AS (
+        INSERT INTO public.creators (email, name)
+        VALUES (lower($1), 'New Creator')
+        ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email
+        RETURNING id
+      )
+      INSERT INTO public.projects (creator_id, title, platform, deadline)
+      SELECT id, $2, $3, $4::timestamp
+      FROM target_creator
+      RETURNING id, creator_id, title, platform, deadline;
+  create_script:
+    kind: postgres-sql
+    source: creatorflow-db
+    description: "Creates a script entry for a project."
+    parameters:
+      - name: project_id
+        type: integer
+        description: "Project id"
+      - name: content
+        type: string
+        description: "Generated script content"
+    statement: |
+      INSERT INTO public.scripts (project_id, content)
+      VALUES ($1, $2)
+      RETURNING id, project_id, content
+  create_task:
+    kind: postgres-sql
+    source: creatorflow-db
+    description: "Creates a task entry for a project."
+    parameters:
+      - name: project_id
+        type: integer
+        description: "Project id"
+      - name: task_name
+        type: string
+        description: "Task name"
+    statement: |
+      INSERT INTO public.tasks (project_id, task_name, is_completed)
+      VALUES ($1, $2, false)
+      RETURNING id, project_id, task_name, is_completed
+  schedule_filming:
+    kind: postgres-sql
+    source: creatorflow-db
+    description: "Schedules a filming event for a creator by email."
+    parameters:
+      - name: creator_email
+        type: string
+        description: "Creator email, for example creator@example.com"
+      - name: event_title
+        type: string
+        description: "Event title, for example Filming Session"
+      - name: start_time
+        type: string
+        description: "Start datetime in ISO format (YYYY-MM-DDTHH:MM[:SS])"
+      - name: end_time
+        type: string
+        description: "End datetime in ISO format (YYYY-MM-DDTHH:MM[:SS])"
+    statement: |
+      WITH target_creator AS (
+        INSERT INTO public.creators (email, name)
+        VALUES (lower($1), 'New Creator')
+        ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email
+        RETURNING id
+      )
+      INSERT INTO public.calendar_events (creator_id, event_title, start_time, end_time)
+      SELECT id, $2, $3::timestamp, $4::timestamp
+      FROM target_creator
+      RETURNING id, creator_id, event_title, start_time, end_time;
+
+  get_my_projects_and_tasks:
+    kind: postgres-sql
+    source: creatorflow-db
+    description: "Returns all projects and tasks for a creator email."
+    parameters:
+      - name: creator_email
+        type: string
+        description: "Creator email, for example creator@example.com"
+    statement: |
+      SELECT
+        p.id AS project_id,
+        p.title,
+        p.platform,
+        p.deadline,
+        t.id AS task_id,
+        t.task_name,
+        t.is_completed
+      FROM public.creators c
+      JOIN public.projects p ON p.creator_id = c.id
+      LEFT JOIN public.tasks t ON t.project_id = p.id
+      WHERE c.email = lower($1)
+      ORDER BY p.id DESC, t.id ASC;
+
+  get_my_schedule:
+    kind: postgres-sql
+    source: creatorflow-db
+    description: "Returns schedule events for a creator email."
+    parameters:
+      - name: creator_email
+        type: string
+        description: "Creator email, for example creator@example.com"
+    statement: |
+      SELECT
+        e.id,
+        e.event_title,
+        e.start_time,
+        e.end_time
+      FROM public.creators c
+      JOIN public.calendar_events e ON e.creator_id = c.id
+      WHERE c.email = lower($1)
+      ORDER BY e.start_time ASC;
+
+toolsets:
+  creatorflow_toolset:
+    - ensure_creatorflow_schema
+    - create_project
+    - create_script
+    - create_task
+    - schedule_filming
+    - get_my_projects_and_tasks
+    - get_my_schedule
