@@ -70,9 +70,10 @@ tools:
       - name: creator_email
         type: string
         description: "Creator email, for example creator@example.com"
+        required: false
       - name: title
         type: string
-        description: "Project title, for example FastAPI vs Node"
+        description: "Project title, for example Impact of AI"
       - name: platform
         type: string
         description: "Publishing platform, for example YouTube or Twitter"
@@ -128,6 +129,7 @@ tools:
       - name: creator_email
         type: string
         description: "Creator email, for example creator@example.com"
+        required: false
       - name: event_title
         type: string
         description: "Event title, for example Filming Session"
@@ -157,6 +159,7 @@ tools:
       - name: creator_email
         type: string
         description: "Creator email, for example creator@example.com"
+        required: false
     statement: |
       SELECT
         p.id AS project_id,
@@ -180,6 +183,7 @@ tools:
       - name: creator_email
         type: string
         description: "Creator email, for example creator@example.com"
+        required: false
     statement: |
       SELECT
         e.id,
