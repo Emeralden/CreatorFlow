@@ -3,8 +3,8 @@
 ### **The Autonomous AI Content Production Engine**
 *Built for the Google Cloud Gen AI Academy APAC Hackathon*
 
-[![API Service](https://campuscue-agent-creatorflow-818053237817.us-central1.run.app)
-[![Web UI Service](https://creatorflow-webapp-818053237817.us-central1.run.app)
+[API Service](https://campuscue-agent-creatorflow-818053237817.us-central1.run.app)
+[Web UI Service](https://creatorflow-webapp-818053237817.us-central1.run.app)
 
 ---
 
