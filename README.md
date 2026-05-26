@@ -1,10 +1,10 @@
 # CreatorFlow
 
-### **The Autonomous AI Content Production Engine**
-*Built for the Google Cloud Gen AI Academy APAC Hackathon*
+An autonomous AI content production engine built for the Google Cloud Gen AI Academy APAC Hackathon.
+Powered by Gemini 2.5 Flash + Google ADK multi-agent orchestration + MCP-to-Postgres execution.
 
-[API Service](https://campuscue-agent-creatorflow-818053237817.us-central1.run.app)
-[Web UI Service](https://creatorflow-webapp-818053237817.us-central1.run.app)
+[![API Service](https://img.shields.io/badge/Live-App-brightgreen)](https://campuscue-agent-creatorflow-818053237817.us-central1.run.app)
+[![Web UI Service](https://img.shields.io/badge/API-Docs-blue)](https://creatorflow-webapp-818053237817.us-central1.run.app)
 
 ---
 
@@ -15,6 +15,12 @@ Content creation today is marked by inefficiency and fragmentation. Creators fre
 
 ---
 
+## Why this isn’t “just a chatbot”
+I stopped building chatbots. I built an AI operating system instead.
+
+Read the write-up: https://medium.com/@7ksb24/i-stopped-building-chatbots-i-built-an-ai-operating-system-instead-5100272b26fc
+
+---
 ## The Architecture
 CreatorFlow is built on a strictly hierarchical **Multi-Agent Orchestration** pattern using the **Google ADK**.
 
