@@ -3,7 +3,7 @@
 An autonomous AI content production engine built for the Google Cloud Gen AI Academy APAC Hackathon.
 Powered by Gemini 2.5 Flash + Google ADK multi-agent orchestration + MCP-to-Postgres execution.
 
-[![API Service](https://img.shields.io/badge/Live-App-brightgreen)](https://campuscue-agent-creatorflow-818053237817.us-central1.run.app)
+[![API Service](https://img.shields.io/badge/Live-App-brightgreen)](https://creatorflow-webapp-818053237817.us-central1.run.app/dev-ui)
 [![Web UI Service](https://img.shields.io/badge/API-Docs-blue)](https://creatorflow-webapp-818053237817.us-central1.run.app/docs)
 
 ---
