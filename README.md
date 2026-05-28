@@ -4,7 +4,7 @@ An autonomous AI content production engine built for the Google Cloud Gen AI Aca
 Powered by Gemini 2.5 Flash + Google ADK multi-agent orchestration + MCP-to-Postgres execution.
 
 [![API Service](https://img.shields.io/badge/Live-App-brightgreen)](https://campuscue-agent-creatorflow-818053237817.us-central1.run.app)
-[![Web UI Service](https://img.shields.io/badge/API-Docs-blue)](https://creatorflow-webapp-818053237817.us-central1.run.app)
+[![Web UI Service](https://img.shields.io/badge/API-Docs-blue)](https://creatorflow-webapp-818053237817.us-central1.run.app/docs)
 
 ---
 
@@ -29,10 +29,10 @@ CreatorFlow is built on a strictly hierarchical **Multi-Agent Orchestration** pa
 *   **Logic:** Analyzes intent and delegates to specialized sub-agents. 
 *   **Zero-Friction Identity:** Automatically manages session-based identity using `uuid` injection.
 
-### **2. The Specialists: Sub-Agents**
-*   **`project_handler`**: Specialist in projects, tasks and scripts management.
-*   **`production_manager`**: Specialist in ISO-standard scheduling sessions.
-*   **`status_tracker`**: Specialist in relational data retrieval and unified views.
+### **2. The Sub-Agents**
+*   **`project_handler`**: Handles projects, tasks and scripts management.
+*   **`production_manager`**: Helps in ISO-standard scheduling sessions.
+*   **`status_tracker`**: Used for relational data retrieval and unified views.
 
 ### **3. The Body: Model Context Protocol (MCP)**
 *   **Secure Bridge:** Uses the Google `genai-toolbox` to connect LLM reasoning to raw SQL execution.
