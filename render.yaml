@@ -1,0 +1,34 @@
+services:
+  # ── 1. MCP Toolbox (PostgreSQL tool server) ──────────────────────────────
+  - type: web
+    name: creatorflow-toolbox
+    runtime: docker
+    dockerfilePath: ./mcp_toolbox/Dockerfile.creatorflow
+    dockerContext: ./mcp_toolbox
+    plan: free
+    envVars:
+      - key: CAMPUSCUE_DB_HOST
+        sync: false
+      - key: CAMPUSCUE_DB_PORT
+        value: "5432"
+      - key: CAMPUSCUE_DB_NAME
+        value: neondb
+      - key: CAMPUSCUE_DB_USER
+        sync: false
+      - key: CAMPUSCUE_DB_PASSWORD
+        sync: false
+
+  # ── 2. ADK Agent (CreatorFlow AI) ────────────────────────────────────────
+  - type: web
+    name: creatorflow-agent
+    runtime: docker
+    dockerfilePath: ./Dockerfile.agent-creatorflow
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: GOOGLE_GENAI_USE_VERTEXAI
+        value: "0"
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: TOOLBOX_URL
+        sync: false
