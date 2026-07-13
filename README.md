@@ -3,8 +3,11 @@
 An autonomous AI content production engine built for the Google Cloud Gen AI Academy APAC Hackathon.
 Powered by Gemini 2.5 Flash + Google ADK multi-agent orchestration + MCP-to-Postgres execution.
 
-[![API Service](https://img.shields.io/badge/Live-App-brightgreen)](https://creatorflow-webapp-818053237817.us-central1.run.app/dev-ui)
-[![Web UI Service](https://img.shields.io/badge/API-Docs-blue)](https://creatorflow-webapp-818053237817.us-central1.run.app/docs)
+[![Live App](https://img.shields.io/badge/Live-App-brightgreen)](https://creatorflow-8i7p.onrender.com/dev-ui)
+[![API Docs](https://img.shields.io/badge/API-Docs-blue)](https://creatorflow-8i7p.onrender.com/docs)
+[![Toolbox](https://img.shields.io/badge/MCP-Toolbox-orange)](https://creatorflow-toolbox.onrender.com)
+
+> ⚡ Free tier — may take ~30s on first load (cold start)
 
 ---
 
@@ -45,7 +48,7 @@ CreatorFlow is built on a strictly hierarchical **Multi-Agent Orchestration** pa
 *   **Framework:** Google Agent Development Kit (ADK)
 *   **Integration:** Model Context Protocol (MCP)
 *   **Database:** Neon PostgreSQL (Relational persistence)
-*   **Infrastructure:** Google Cloud Run (Stateless containerized scaling)
+*   **Infrastructure:** Render (Stateless containerized deployment)
 
 ---
 
