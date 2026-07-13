@@ -7,8 +7,6 @@ Powered by Gemini 2.5 Flash + Google ADK multi-agent orchestration + MCP-to-Post
 [![API Docs](https://img.shields.io/badge/API-Docs-blue)](https://creatorflow-8i7p.onrender.com/docs)
 [![Toolbox](https://img.shields.io/badge/MCP-Toolbox-orange)](https://creatorflow-toolbox.onrender.com)
 
-> ⚡ Free tier — may take ~30s on first load (cold start)
-
 ---
 
 ## The Vision
