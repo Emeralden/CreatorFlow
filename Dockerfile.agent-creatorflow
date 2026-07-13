@@ -10,4 +10,4 @@ COPY creator_flow_agent /app/root_agent
 
 ENV PORT=8080
 
-CMD ["python", "-m", "google.adk.cli", "api_server", "--host", "0.0.0.0", "--port", "8080", "/app"]
+CMD ["python", "-m", "google.adk.cli", "web", "--host", "0.0.0.0", "--port", "8080", "/app"]
