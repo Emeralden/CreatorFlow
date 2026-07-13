@@ -8,7 +8,7 @@ sources:
     password: ${CAMPUSCUE_DB_PASSWORD}
     queryParams:
       sslmode: require
-      channel_binding: require
+      channel_binding: disable
       default_query_exec_mode: simple_protocol
 
 tools:
