@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y curl ca-certificates
 
 RUN curl -fSL -o toolbox https://storage.googleapis.com/genai-toolbox/v0.23.0/linux/amd64/toolbox && chmod +x toolbox
 
-COPY creator_tools.yaml /creator_tools.yaml
+COPY mcp_toolbox/creator_tools.yaml /creator_tools.yaml
 
 EXPOSE 8080
 
